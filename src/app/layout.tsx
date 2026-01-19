@@ -12,7 +12,7 @@ export const metadata = {
   description: 'Premium catering services, custom cakes, meat pies, and catfish in Abuja',
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
