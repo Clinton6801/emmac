@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Plus, Minus, Calendar } from 'lucide-react';
-import { initialProducts } from '../lib/data';
-import { useCart } from '../context/CartContext';
-import { formatPrice } from '../lib/utils';
-import CustomizationForm from '../components/CustomizationForm';
+import { initialProducts } from '../../..lib/data';
+import { useCart } from '../../../context/CartContext';
+import { formatPrice } from '../../../lib/utils';
+import CustomizationForm from '../../../components/CustomizationForm';
 
 export default function ProductDetailPage() {
   const params = useParams();

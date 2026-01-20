@@ -1,7 +1,7 @@
 'use client'
 
 import { Clock, MapPin, Phone } from 'lucide-react';
-import { businessInfo } from '../lib/data';
+import { businessInfo } from '../../lib/data';
 
 export default function ContactPage() {
   return (
