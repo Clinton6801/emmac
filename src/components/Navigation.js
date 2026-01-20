@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { businessInfo } from '../../lib/data';
+import { businessInfo } from '../lib/data';
 
 export default function Navigation() {
   const [mobileMenu, setMobileMenu] = useState(false);
