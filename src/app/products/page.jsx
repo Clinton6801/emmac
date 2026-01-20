@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { initialProducts, categories } from '@/lib/data';
-import ProductCard from '../components/ProductCard';
+import { initialProducts, categories } from '../../lib/data';
+import ProductCard from '../../components/ProductCard';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState(initialProducts);
