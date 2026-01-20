@@ -5,7 +5,7 @@ export const businessInfo = {
   hours: "Mon-Sat: 8AM - 8PM, Sun: Closed",
   location: "Abuja, FCT, Nigeria",
   phone: "+234 XXX XXX XXXX",
-  whatsapp: "2348012345678" // Replace with actual number
+  whatsapp: "2349037789995" // Replace with actual number
 };
 
 export const initialProducts = [
