@@ -1,7 +1,7 @@
 'use client';
 
 import { Calendar } from 'lucide-react';
-import { getMinDeliveryDate } from '@/lib/utils';
+import { getMinDeliveryDate } from '../lib/utils';
 
 export default function CustomizationForm({ product, customization, setCustomization }) {
   if (!product.customizable) return null;
