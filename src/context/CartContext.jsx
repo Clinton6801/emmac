@@ -44,9 +44,18 @@ export function CartProvider({ children }) {
   };
 
   return (
-    
+    <CartContext.Provider value={{
+      cart,
+      showCart,
+      setShowCart,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      getCartTotal
+    }}>
       {children}
-    
+    </CartContext.Provider>
   );
 }
 
