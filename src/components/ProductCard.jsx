@@ -5,6 +5,12 @@ import { Eye, Calendar } from 'lucide-react';
 import { formatPrice } from '../lib/utils';
 
 export default function ProductCard({ product, onView }) {
+  const handleClick = () => {
+    if (onView) {
+      onView(product.id);
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
       <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
@@ -25,7 +31,7 @@ export default function ProductCard({ product, onView }) {
         )}
         <Link 
           href={`/products/${product.id}`}
-          onClick={() => onView && onView(product.id)}
+          onClick={handleClick}
           className="block w-full bg-orange-600 text-white py-2 rounded hover:bg-orange-700 text-center"
         >
           View Details
