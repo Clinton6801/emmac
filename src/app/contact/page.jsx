@@ -1,3 +1,5 @@
+'use client'
+
 import { Clock, MapPin, Phone } from 'lucide-react';
 import { businessInfo } from '../lib/data';
 

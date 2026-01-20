@@ -1,3 +1,5 @@
+'use client'
+
 import { initialGallery } from '../lib/data';
 
 export default function GalleryPage() {
