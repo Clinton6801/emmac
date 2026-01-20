@@ -1,7 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Reset background to white instead of using CSS variables */
 body {
+  background-color: #f9fafb;
+  color: #171717;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Disable dark mode auto-switching */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #f9fafb;
+    color: #171717;
+  }
 }
