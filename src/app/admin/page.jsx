@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Trash2 } from 'lucide-react';
 import { getProducts, getGallery, addProduct, deleteProduct as removeProduct, addGalleryImage } from '../../lib/data';
 import AdminAnalytics from '../../components/AdminAnalytics';
-import AdminProductForm from '../../components/AdminProductForm';
+import AdminProductForm from '../../components/AdminProductform';
 
 export default function AdminPage() {
   const router = useRouter();
