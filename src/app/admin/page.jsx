@@ -6,6 +6,7 @@ import { Trash2 } from 'lucide-react';
 import { getProducts, getGallery, addProduct, deleteProduct as removeProduct, addGalleryImage } from '../../lib/data';
 import AdminAnalytics from '../../components/AdminAnalytics';
 import AdminProductForm from '../../components/AdminProductform';
+import ImageUpload from '../../components/imageUpload';
 
 export default function AdminPage() {
   const router = useRouter();
