@@ -1,19 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Trash2 } from 'lucide-react';
-import { initialProducts, initialGallery } from '../../lib/data';
+import { getProducts, getGallery, addProduct, deleteProduct as removeProduct, addGalleryImage } from '../../lib/data';
 import AdminAnalytics from '../../components/AdminAnalytics';
-import AdminProductForm from '../../components/AdminProductform';
+import AdminProductForm from '../../components/AdminProductForm';
 
 export default function AdminPage() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
-  const [products, setProducts] = useState(initialProducts);
-  const [gallery, setGallery] = useState(initialGallery);
+  const [products, setProducts] = useState([]);  // Changed from initialProducts
+  const [gallery, setGallery] = useState([]);    // Changed from initialGallery
   const [newGalleryItem, setNewGalleryItem] = useState({ image: '', title: '' });
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchData();
+    }
+  }, [isAuthenticated]);
+
+  async function fetchData() {
+    setLoading(true);
+    const fetchedProducts = await getProducts();
+    const fetchedGallery = await getGallery();
+    setProducts(fetchedProducts);
+    setGallery(fetchedGallery);
+    setLoading(false);
+  }
 
   const handleLogin = () => {
     if (password === 'admin123') { // CHANGE THIS PASSWORD!
@@ -23,21 +39,38 @@ export default function AdminPage() {
     }
   };
 
-  const addProduct = (product) => {
-    setProducts([...products, product]);
-  };
-
-  const deleteProduct = (id) => {
-    if (confirm('Are you sure you want to delete this product?')) {
-      setProducts(products.filter(p => p.id !== id));
+  const handleAddProduct = async (product) => {
+    const newProduct = await addProduct(product);
+    if (newProduct) {
+      setProducts([newProduct, ...products]);
+      alert('Product added successfully!');
+    } else {
+      alert('Error adding product');
     }
   };
 
-  const addGalleryImage = () => {
+  const handleDeleteProduct = async (id) => {
+    if (confirm('Are you sure you want to delete this product?')) {
+      const success = await removeProduct(id);
+      if (success) {
+        setProducts(products.filter(p => p.id !== id));
+        alert('Product deleted!');
+      } else {
+        alert('Error deleting product');
+      }
+    }
+  };
+
+  const handleAddGalleryImage = async () => {
     if (newGalleryItem.image && newGalleryItem.title) {
-      setGallery([...gallery, { ...newGalleryItem, id: Date.now().toString() }]);
-      setNewGalleryItem({ image: '', title: '' });
-      alert('Gallery image added!');
+      const newImage = await addGalleryImage(newGalleryItem);
+      if (newImage) {
+        setGallery([newImage, ...gallery]);
+        setNewGalleryItem({ image: '', title: '' });
+        alert('Gallery image added!');
+      } else {
+        alert('Error adding image');
+      }
     }
   };
 
@@ -71,6 +104,14 @@ export default function AdminPage() {
     );
   }
 
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="text-center">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <h2 className="text-4xl font-bold mb-8">Admin Dashboard</h2>
@@ -98,7 +139,7 @@ export default function AdminPage() {
       </div>
 
       <div className="mb-8">
-        <AdminProductForm onAddProduct={addProduct} />
+        <AdminProductForm onAddProduct={handleAddProduct} />
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
@@ -111,7 +152,7 @@ export default function AdminPage() {
                 <p className="text-sm text-gray-600">₦{product.price.toLocaleString()} • {product.views || 0} views</p>
               </div>
               <button
-                onClick={() => deleteProduct(product.id)}
+                onClick={() => handleDeleteProduct(product.id)}
                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
               >
                 <Trash2 className="w-4 h-4" />
@@ -140,7 +181,7 @@ export default function AdminPage() {
           />
         </div>
         <button
-          onClick={addGalleryImage}
+          onClick={handleAddGalleryImage}
           className="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
         >
           Add to Gallery

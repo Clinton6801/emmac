@@ -134,10 +134,3 @@ export async function incrementProductViews(id) {
   }
 }
 
-// Create this SQL function in Supabase:
-// CREATE OR REPLACE FUNCTION increment_views(product_id UUID)
-// RETURNS void AS $$
-// BEGIN
-//   UPDATE products SET views = views + 1 WHERE id = product_id;
-// END;
-// $$ LANGUAGE plpgsql;
