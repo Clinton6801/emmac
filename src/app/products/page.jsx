@@ -1,22 +1,44 @@
 'use client';
 
-import { useState } from 'react';
-import { initialProducts, categories } from '../../lib/data';
+import { useState, useEffect } from 'react';
+import { getProducts, incrementProductViews } from '../../lib/data';
+import { categories } from '../../lib/data';
 import ProductCard from '../../components/ProductCard';
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true);
+      const fetchedProducts = await getProducts();
+      setProducts(fetchedProducts);
+      setLoading(false);
+    }
+    fetchProducts();
+  }, []);
 
   const filteredProducts = selectedCategory === 'all' 
     ? products 
     : products.filter(p => p.category === selectedCategory);
 
-  const incrementViews = (productId) => {
+  const handleViewProduct = async (productId) => {
+    await incrementProductViews(productId);
+    // Update local state
     setProducts(prev => prev.map(p => 
       p.id === productId ? { ...p, views: (p.views || 0) + 1 } : p
     ));
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="text-center">Loading products...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -43,7 +65,7 @@ export default function ProductsPage() {
           <ProductCard 
             key={product.id} 
             product={product} 
-            onView={incrementViews}
+            onView={handleViewProduct}
           />
         ))}
       </div>
