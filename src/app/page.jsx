@@ -1,9 +1,34 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { initialProducts, reviews } from '../lib/data';
+import { getProducts, getReviews } from '../lib/data';
 import ProductCard from '../components/ProductCard';
 
 export default function HomePage() {
-  const featuredProducts = initialProducts.slice(0, 3);
+  const [products, setProducts] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      const fetchedProducts = await getProducts();
+      const fetchedReviews = await getReviews();
+      setProducts(fetchedProducts.slice(0, 3)); // Get first 3 for featured
+      setReviews(fetchedReviews);
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -25,7 +50,7 @@ export default function HomePage() {
       <div className="max-w-7xl mx-auto px-4 py-16">
         <h3 className="text-3xl font-bold text-center mb-12">Featured Products</h3>
         <div className="grid md:grid-cols-3 gap-8">
-          {featuredProducts.map(product => (
+          {products.map(product => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
