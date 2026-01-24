@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Plus, Minus, Calendar } from 'lucide-react';
-import { initialProducts } from '../../../lib/data';
+import { getProduct, incrementProductViews } from '../../../lib/data';
 import { useCart } from '../../../context/CartContext';
 import { formatPrice } from '../../../lib/utils';
 import CustomizationForm from '../../../components/CustomizationForm';
@@ -13,7 +13,8 @@ export default function ProductDetailPage() {
   const router = useRouter();
   const { addToCart } = useCart();
   
-  const product = initialProducts.find(p => p.id === params.id);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [customization, setCustomization] = useState({
     size: '',
@@ -25,6 +26,27 @@ export default function ProductDetailPage() {
     deliveryTime: '',
     notes: ''
   });
+
+  useEffect(() => {
+    async function fetchProduct() {
+      setLoading(true);
+      const fetchedProduct = await getProduct(params.id);
+      if (fetchedProduct) {
+        setProduct(fetchedProduct);
+        await incrementProductViews(params.id);
+      }
+      setLoading(false);
+    }
+    fetchProduct();
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="text-center">Loading...</div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -63,18 +85,18 @@ export default function ProductDetailPage() {
           <p className="text-3xl text-orange-600 font-bold mb-6">{formatPrice(product.price)}</p>
           <p className="text-gray-700 mb-6">{product.description}</p>
           
-          {product.minLeadTime && (
+          {product.min_lead_time && (
             <div className="bg-yellow-50 border border-yellow-200 rounded p-4 mb-6">
               <p className="text-sm">
                 <Calendar className="w-4 h-4 inline mr-2" />
-                Minimum {product.minLeadTime} days advance notice required
+                Minimum {product.min_lead_time} days advance notice required
               </p>
             </div>
           )}
 
-          {product.minOrder && (
+          {product.min_order && (
             <div className="bg-blue-50 border border-blue-200 rounded p-4 mb-6">
-              <p className="text-sm">Minimum order: {product.minOrder} guests</p>
+              <p className="text-sm">Minimum order: {product.min_order} guests</p>
             </div>
           )}
 
