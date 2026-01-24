@@ -162,8 +162,6 @@ export default function AdminPage() {
           ))}
         </div>
       </div>
-
-      // Replace the gallery section with:
 <div className="bg-white p-6 rounded-lg shadow-md">
   <h3 className="text-2xl font-semibold mb-4">Add Gallery Image</h3>
   
