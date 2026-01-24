@@ -1,13 +1,35 @@
-'use client'
+'use client';
 
-import { initialGallery } from '../../lib/data';
+import { useState, useEffect } from 'react';
+import { getGallery } from '../../lib/data';
 
 export default function GalleryPage() {
+  const [gallery, setGallery] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchGallery() {
+      setLoading(true);
+      const fetchedGallery = await getGallery();
+      setGallery(fetchedGallery);
+      setLoading(false);
+    }
+    fetchGallery();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="text-center">Loading gallery...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <h2 className="text-4xl font-bold mb-8">Our Portfolio</h2>
       <div className="grid md:grid-cols-3 gap-6">
-        {initialGallery.map(item => (
+        {gallery.map(item => (
           <div key={item.id} className="relative group overflow-hidden rounded-lg shadow-lg">
             <img 
               src={item.image} 
