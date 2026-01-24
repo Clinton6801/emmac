@@ -74,7 +74,7 @@ export default function CustomizationForm({ product, customization, setCustomiza
             value={customization.guests}
             onChange={(e) => setCustomization({...customization, guests: e.target.value})}
             placeholder="e.g., 100"
-            min={product.minOrder || 1}
+            min={product.min_order || 1}
             className="w-full border rounded px-3 py-2"
           />
         </div>
@@ -87,7 +87,7 @@ export default function CustomizationForm({ product, customization, setCustomiza
           value={customization.deliveryDate}
           onChange={(e) => setCustomization({...customization, deliveryDate: e.target.value})}
           className="w-full border rounded px-3 py-2"
-          min={getMinDeliveryDate(product.minLeadTime || 0)}
+          min={getMinDeliveryDate(product.min_lead_time || 0)}
         />
       </div>
 
