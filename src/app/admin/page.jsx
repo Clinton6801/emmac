@@ -163,40 +163,40 @@ export default function AdminPage() {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-2xl font-semibold mb-4">Add Gallery Image</h3>
-        <div className="grid md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={newGalleryItem.image}
-            onChange={(e) => setNewGalleryItem({...newGalleryItem, image: e.target.value})}
-            className="border rounded px-3 py-2"
-          />
-          <input
-            type="text"
-            placeholder="Title"
-            value={newGalleryItem.title}
-            onChange={(e) => setNewGalleryItem({...newGalleryItem, title: e.target.value})}
-            className="border rounded px-3 py-2"
-          />
-        </div>
-        <button
-          onClick={handleAddGalleryImage}
-          className="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
-        >
-          Add to Gallery
-        </button>
+      // Replace the gallery section with:
+<div className="bg-white p-6 rounded-lg shadow-md">
+  <h3 className="text-2xl font-semibold mb-4">Add Gallery Image</h3>
+  
+  <ImageUpload 
+    onUploadSuccess={(url) => setNewGalleryItem({...newGalleryItem, image: url})}
+    buttonText="Upload gallery image"
+  />
+  
+  <input
+    type="text"
+    placeholder="Image Title"
+    value={newGalleryItem.title}
+    onChange={(e) => setNewGalleryItem({...newGalleryItem, title: e.target.value})}
+    className="border rounded px-3 py-2 w-full mt-4"
+  />
+  
+  <button
+    onClick={handleAddGalleryImage}
+    className="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+    disabled={!newGalleryItem.image || !newGalleryItem.title}
+  >
+    Add to Gallery
+  </button>
 
-        <div className="mt-6 grid md:grid-cols-3 gap-4">
-          {gallery.map(item => (
-            <div key={item.id} className="relative group">
-              <img src={item.image} alt={item.title} className="w-full h-32 object-cover rounded" />
-              <p className="text-sm mt-1">{item.title}</p>
-            </div>
-          ))}
-        </div>
+  <div className="mt-6 grid md:grid-cols-3 gap-4">
+    {gallery.map(item => (
+      <div key={item.id} className="relative group">
+        <img src={item.image} alt={item.title} className="w-full h-32 object-cover rounded" />
+        <p className="text-sm mt-1">{item.title}</p>
       </div>
+    ))}
+  </div>
+</div>
     </div>
   );
 }
