@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import ImageUpload from './imageUpload';
 
 export default function AdminProductForm({ onAddProduct }) {
   const [newProduct, setNewProduct] = useState({
@@ -10,8 +11,8 @@ export default function AdminProductForm({ onAddProduct }) {
     image: '',
     description: '',
     customizable: false,
-    minLeadTime: 1,
-    minOrder: 0
+    min_lead_time: 1,
+    min_order: 0
   });
 
   const handleSubmit = () => {
@@ -19,7 +20,6 @@ export default function AdminProductForm({ onAddProduct }) {
       onAddProduct({ 
         ...newProduct, 
         price: parseFloat(newProduct.price),
-        id: Date.now().toString(),
         views: 0
       });
       setNewProduct({
@@ -29,12 +29,12 @@ export default function AdminProductForm({ onAddProduct }) {
         image: '',
         description: '',
         customizable: false,
-        minLeadTime: 1,
-        minOrder: 0
+        min_lead_time: 1,
+        min_order: 0
       });
       alert('Product added!');
     } else {
-      alert('Please fill all required fields');
+      alert('Please fill all required fields including image');
     }
   };
 
@@ -69,17 +69,23 @@ export default function AdminProductForm({ onAddProduct }) {
         <input
           type="number"
           placeholder="Min Lead Time (days)"
-          value={newProduct.minLeadTime}
-          onChange={(e) => setNewProduct({...newProduct, minLeadTime: parseInt(e.target.value)})}
+          value={newProduct.min_lead_time}
+          onChange={(e) => setNewProduct({...newProduct, min_lead_time: parseInt(e.target.value)})}
           className="border rounded px-3 py-2"
         />
-        <input
-          type="text"
-          placeholder="Image URL *"
-          value={newProduct.image}
-          onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
-          className="border rounded px-3 py-2 md:col-span-2"
-        />
+        
+        {/* Image Upload - Replaces URL input */}
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium mb-2">Product Image *</label>
+          <ImageUpload 
+            onUploadSuccess={(url) => setNewProduct({...newProduct, image: url})}
+            buttonText="Click to upload product image"
+          />
+          {newProduct.image && (
+            <p className="text-sm text-green-600 mt-2">✓ Image uploaded</p>
+          )}
+        </div>
+
         <textarea
           placeholder="Description"
           value={newProduct.description}
@@ -98,14 +104,15 @@ export default function AdminProductForm({ onAddProduct }) {
         <input
           type="number"
           placeholder="Min Order (for catering)"
-          value={newProduct.minOrder}
-          onChange={(e) => setNewProduct({...newProduct, minOrder: parseInt(e.target.value)})}
+          value={newProduct.min_order}
+          onChange={(e) => setNewProduct({...newProduct, min_order: parseInt(e.target.value)})}
           className="border rounded px-3 py-2"
         />
       </div>
       <button
         onClick={handleSubmit}
         className="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+        disabled={!newProduct.image}
       >
         Add Product
       </button>
