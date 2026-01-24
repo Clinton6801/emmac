@@ -3,9 +3,9 @@ import { supabase } from './supabase';
 export const businessInfo = {
   name: "Delish Catering",
   hours: "Mon-Sat: 8AM - 8PM, Sun: Closed",
-  location: "Abuja, FCT, Nigeria",
+  location: "united Kingdom",
   phone: "+234 XXX XXX XXXX",
-  whatsapp: "2348012345678" // Replace with actual number
+  whatsapp: "2349037789995" // Replace with actual number
 };
 
 export const categories = [
