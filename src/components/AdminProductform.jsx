@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import ImageUpload from './imageUpload';
+const [additionalImages, setAdditionalImages] = useState([]);
 
 export default function AdminProductForm({ onAddProduct }) {
   const [newProduct, setNewProduct] = useState({
@@ -85,6 +86,30 @@ export default function AdminProductForm({ onAddProduct }) {
             <p className="text-sm text-green-600 mt-2">✓ Image uploaded</p>
           )}
         </div>
+      
+<div className="md:col-span-2">
+  <label className="block text-sm font-medium mb-2">Additional Images (optional)</label>
+  <ImageUpload 
+    onUploadSuccess={(url) => setAdditionalImages([...additionalImages, url])}
+    buttonText="Add more images"
+  />
+  {additionalImages.length > 0 && (
+    <div className="flex gap-2 mt-2 flex-wrap">
+      {additionalImages.map((img, idx) => (
+        <div key={idx} className="relative">
+          <img src={img} alt={`Additional ${idx}`} className="w-20 h-20 object-cover rounded" />
+          <button
+            type="button"
+            onClick={() => setAdditionalImages(additionalImages.filter((_, i) => i !== idx))}
+            className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 text-xs"
+          >
+            ×
+          </button>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
 
         <textarea
           placeholder="Description"

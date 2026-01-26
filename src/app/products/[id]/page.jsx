@@ -9,6 +9,7 @@ import { formatPrice } from '../../../lib/utils';
 import CustomizationForm from '../../../components/CustomizationForm';
 import ReviewForm from '../../../components/ReviewForm';
 import ReviewList from '../../../components/ReviewList';
+import ImageGallery from '../../../components/ImageGallery';
 import toast from 'react-hot-toast';
 
 export default function ProductDetailPage() {
@@ -21,6 +22,7 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const [productImages, setProductImages] = useState([]);
   const [customization, setCustomization] = useState({
     size: '',
     flavor: '',
@@ -39,6 +41,8 @@ export default function ProductDetailPage() {
         getProduct(params.id),
         getProductReviews(params.id)
       ]);
+      const fetchedImages = await getProductImages(params.id);
+setProductImages(fetchedImages);
       
       if (fetchedProduct) {
         setProduct(fetchedProduct);
@@ -93,8 +97,12 @@ export default function ProductDetailPage() {
       
       <div className="grid md:grid-cols-2 gap-12 mb-12">
         <div>
-          <img src={product.image} alt={product.name} className="w-full rounded-lg shadow-lg" />
-        </div>
+  {productImages.length > 0 ? (
+    <ImageGallery images={productImages} />
+  ) : (
+    <img src={product.image} alt={product.name} className="w-full rounded-lg shadow-lg" />
+  )}
+</div>
         
         <div>
           <h2 className="text-4xl font-bold mb-4">{product.name}</h2>
