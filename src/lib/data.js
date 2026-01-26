@@ -1,4 +1,6 @@
 import { supabase } from './supabase';
+import { Cake, UtensilsCrossed, Fish, Users } from 'lucide-react';
+
 
 export const businessInfo = {
   name: "Delish Catering",
@@ -9,12 +11,13 @@ export const businessInfo = {
 };
 
 export const categories = [
-  { id: 'all', name: 'All Products' },
-  { id: 'cakes', name: 'Cakes' },
-  { id: 'pies', name: 'Meat Pies' },
-  { id: 'catfish', name: 'Catfish' },
-  { id: 'catering', name: 'Catering' }
+  { id: 'all', name: 'All Products', icon: UtensilsCrossed },
+  { id: 'cakes', name: 'Cakes', icon: Cake },
+  { id: 'pies', name: 'Meat Pies', icon: UtensilsCrossed },
+  { id: 'catfish', name: 'Catfish', icon: Fish },
+  { id: 'catering', name: 'Catering', icon: Users }
 ];
+
 
 // Fetch functions
 export async function getProducts() {
