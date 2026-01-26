@@ -123,6 +123,12 @@ export default function AdminPage() {
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-2xl font-semibold mb-4">Quick Actions</h3>
           <div className="space-y-3">
+                <button 
+                   onClick={() => router.push('/admin/orders')}
+                   className="w-full bg-orange-600 text-white py-2 rounded hover:bg-orange-700"
+                 >
+                     Manage Orders
+                 </button>
             <button 
               onClick={() => setIsAuthenticated(false)}
               className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700"
