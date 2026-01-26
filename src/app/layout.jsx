@@ -4,6 +4,7 @@ import Providers from '../components/Providers';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import CartSidebar from '../components/CartSidebar';
+import ToastProvider from '../components/ToastProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <Providers>
+          <ToastProvider />
           <div className="min-h-screen bg-gray-50">
             <Navigation />
             <main>{children}</main>
