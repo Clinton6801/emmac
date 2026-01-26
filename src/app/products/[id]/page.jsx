@@ -10,6 +10,7 @@ import CustomizationForm from '../../../components/CustomizationForm';
 import ReviewForm from '../../../components/ReviewForm';
 import ReviewList from '../../../components/ReviewList';
 import ImageGallery from '../../../components/ImageGallery';
+import RelatedProducts from '../../../components/RelatedProducts';
 import toast from 'react-hot-toast';
 
 export default function ProductDetailPage() {
@@ -205,6 +206,10 @@ setProductImages(fetchedImages);
           <div>
             <ReviewList reviews={reviews} />
           </div>
+<RelatedProducts 
+  currentProductId={product.id} 
+  category={product.category} 
+/>
         </div>
       </div>
     </div>
