@@ -26,6 +26,8 @@ export default function Navigation() {
   <Link href="/gallery" className="hover:text-orange-600 transition">Gallery</Link>
   <Link href="/orders" className="hover:text-orange-600 transition">Track Order</Link>
   <Link href="/contact" className="hover:text-orange-600 transition">Contact</Link>
+  <Link href="/faq" className="hover:text-orange-600 transition">FAQ</Link>
+  <Link href="/about" className="hover:text-orange-600 transition">About</Link>
 </div>
           
           {/* Cart & Mobile Menu */}
