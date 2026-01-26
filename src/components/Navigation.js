@@ -20,12 +20,13 @@ export default function Navigation() {
           </Link>
           
           {/* Center Navigation - Desktop */}
-          <div className="hidden md:flex space-x-8">
-            <Link href="/" className="hover:text-orange-600 transition">Home</Link>
-            <Link href="/products" className="hover:text-orange-600 transition">Products</Link>
-            <Link href="/gallery" className="hover:text-orange-600 transition">Gallery</Link>
-            <Link href="/contact" className="hover:text-orange-600 transition">Contact</Link>
-          </div>
+         <div className="hidden md:flex space-x-8">
+  <Link href="/" className="hover:text-orange-600 transition">Home</Link>
+  <Link href="/products" className="hover:text-orange-600 transition">Products</Link>
+  <Link href="/gallery" className="hover:text-orange-600 transition">Gallery</Link>
+  <Link href="/orders" className="hover:text-orange-600 transition">Track Order</Link>
+  <Link href="/contact" className="hover:text-orange-600 transition">Contact</Link>
+</div>
           
           {/* Cart & Mobile Menu */}
           <div className="flex items-center space-x-4">
