@@ -129,6 +129,12 @@ export default function AdminPage() {
                  >
                      Manage Orders
                  </button>
+                  <button 
+                        onClick={() => router.push('/admin/reviews')}
+                        className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700"
+                       >
+                       Manage Reviews
+                          </button>
             <button 
               onClick={() => setIsAuthenticated(false)}
               className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700"
