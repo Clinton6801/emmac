@@ -6,22 +6,18 @@ import { getProducts, incrementProductViews } from '../../lib/data';
 import { categories } from '../../lib/data';
 import ProductCard from '../../components/ProductCard';
 import { ProductCardSkeleton } from '../../components/SkeletonLoader';
-import ImageGallery from '../../components/ImageGallery';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
-  
 
   useEffect(() => {
     async function fetchProducts() {
       setLoading(true);
       const fetchedProducts = await getProducts();
       setProducts(fetchedProducts);
-       const fetchedImages = await getProductImages(params.id);
-setProductImages(fetchedImages);
       setLoading(false);
     }
     fetchProducts();
