@@ -57,21 +57,26 @@ export default function ProductsPage() {
       </div>
 
       {/* Category Filters */}
-      <div className="flex flex-wrap gap-4 mb-8">
-        {categories.map(cat => (
-          <button
-            key={cat.id}
-            onClick={() => setSelectedCategory(cat.id)}
-            className={`px-6 py-2 rounded-full transition ${
-              selectedCategory === cat.id 
-                ? 'bg-orange-600 text-white' 
-                : 'bg-gray-200 hover:bg-gray-300'
-            }`}
-          >
-            {cat.name}
-          </button>
-        ))}
-      </div>
+      {/* Category Filters with Icons */}
+<div className="flex flex-wrap gap-4 mb-8">
+  {categories.map(cat => {
+    const IconComponent = cat.icon;
+    return (
+      <button
+        key={cat.id}
+        onClick={() => setSelectedCategory(cat.id)}
+        className={`flex items-center gap-2 px-6 py-3 rounded-full transition ${
+          selectedCategory === cat.id 
+            ? 'bg-orange-600 text-white shadow-lg' 
+            : 'bg-white text-gray-700 hover:bg-orange-50 border border-gray-200'
+        }`}
+      >
+        <IconComponent className="w-5 h-5" />
+        {cat.name}
+      </button>
+    );
+  })}
+</div>
 
       {/* Products Grid */}
       {loading ? (
