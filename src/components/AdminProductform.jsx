@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import ImageUpload from './imageUpload';
-const [additionalImages, setAdditionalImages] = useState([]);
+
 
 export default function AdminProductForm({ onAddProduct }) {
   const [newProduct, setNewProduct] = useState({
@@ -15,6 +15,8 @@ export default function AdminProductForm({ onAddProduct }) {
     min_lead_time: 1,
     min_order: 0
   });
+
+  const [additionalImages, setAdditionalImages] = useState([]);
 
   const handleSubmit = () => {
     if (newProduct.name && newProduct.price && newProduct.image) {

@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Star, Check, X } from 'lucide-react';
-import { getPendingReviews, approveReview, supabase } from '../../../lib/data';
+import { getPendingReviews, approveReview } from '../../../lib/data';
+import { supabase } from '../../../lib/supabase';
 import toast from 'react-hot-toast';
 
 export default function AdminReviewsPage() {

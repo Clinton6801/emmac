@@ -6,7 +6,7 @@ import { ArrowLeft, Trash2, Edit, Eye } from 'lucide-react';
 import { getProducts, deleteProduct, addProduct, supabase } from '../../../lib/data';
 import { formatPrice } from '../../../lib/utils';
 import toast from 'react-hot-toast';
-import AdminProductForm from '../../../components/AdminProductForm';
+import AdminProductForm from '../../../components/AdminProductform';
 import BulkProductUpload from '../../../components/BulkProductUpload';
 
 export default function AdminProductsPage() {
