@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: ['images.unsplash.com', 'res.cloudinary.com'], // Add your image domains
+    formats: ['image/webp', 'image/avif'],
+  },
+}
 
-export default nextConfig;
+module.exports = nextConfig
+

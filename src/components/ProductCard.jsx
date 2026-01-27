@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Eye, Calendar } from 'lucide-react';
 import { formatPrice } from '../lib/utils';
-
+import Image from 'next/image';
 export default function ProductCard({ product, onView }) {
   const handleClick = () => {
     if (onView) {
@@ -13,7 +13,14 @@ export default function ProductCard({ product, onView }) {
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
-      <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+<Image 
+  src={product.image} 
+  alt={product.name} 
+  width={400}
+  height={300}
+  className="w-full h-48 object-cover"
+  loading="lazy"
+/>
       <div className="p-4">
         <h4 className="text-lg font-semibold mb-2">{product.name}</h4>
         <p className="text-gray-600 text-sm mb-3">{product.description}</p>
