@@ -2,19 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Trash2 } from 'lucide-react';
-import { getProducts, getGallery, addProduct, deleteProduct as removeProduct, addGalleryImage } from '../../lib/data';
-import AdminAnalytics from '../../components/AdminAnalytics';
-import AdminProductForm from '../../components/AdminProductform';
-import ImageUpload from '../../components/imageUpload';
+import { getProducts, getOrders } from '../lib/data';
+import AdminDashboard from '../components/AdminDashboard';
 
 export default function AdminPage() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
-  const [products, setProducts] = useState([]);  // Changed from initialProducts
-  const [gallery, setGallery] = useState([]);    // Changed from initialGallery
-  const [newGalleryItem, setNewGalleryItem] = useState({ image: '', title: '' });
+  const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -25,53 +21,20 @@ export default function AdminPage() {
 
   async function fetchData() {
     setLoading(true);
-    const fetchedProducts = await getProducts();
-    const fetchedGallery = await getGallery();
+    const [fetchedProducts, fetchedOrders] = await Promise.all([
+      getProducts(),
+      getOrders()
+    ]);
     setProducts(fetchedProducts);
-    setGallery(fetchedGallery);
+    setOrders(fetchedOrders);
     setLoading(false);
   }
 
   const handleLogin = () => {
-    if (password === 'admin123') { // CHANGE THIS PASSWORD!
+    if (password === 'admin123') {
       setIsAuthenticated(true);
     } else {
       alert('Incorrect password');
-    }
-  };
-
-  const handleAddProduct = async (product) => {
-    const newProduct = await addProduct(product);
-    if (newProduct) {
-      setProducts([newProduct, ...products]);
-      alert('Product added successfully!');
-    } else {
-      alert('Error adding product');
-    }
-  };
-
-  const handleDeleteProduct = async (id) => {
-    if (confirm('Are you sure you want to delete this product?')) {
-      const success = await removeProduct(id);
-      if (success) {
-        setProducts(products.filter(p => p.id !== id));
-        alert('Product deleted!');
-      } else {
-        alert('Error deleting product');
-      }
-    }
-  };
-
-  const handleAddGalleryImage = async () => {
-    if (newGalleryItem.image && newGalleryItem.title) {
-      const newImage = await addGalleryImage(newGalleryItem);
-      if (newImage) {
-        setGallery([newImage, ...gallery]);
-        setNewGalleryItem({ image: '', title: '' });
-        alert('Gallery image added!');
-      } else {
-        alert('Error adding image');
-      }
     }
   };
 
@@ -108,105 +71,44 @@ export default function AdminPage() {
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="text-center">Loading...</div>
+        <div className="text-center">Loading dashboard...</div>
       </div>
     );
   }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h2 className="text-4xl font-bold mb-8">Admin Dashboard</h2>
-      
-      <div className="grid md:grid-cols-2 gap-8 mb-8">
-        <AdminAnalytics products={products} />
-        
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-2xl font-semibold mb-4">Quick Actions</h3>
-          <div className="space-y-3">
-                <button 
-                   onClick={() => router.push('/admin/orders')}
-                   className="w-full bg-orange-600 text-white py-2 rounded hover:bg-orange-700"
-                 >
-                     Manage Orders
-                 </button>
-                  <button 
-                        onClick={() => router.push('/admin/reviews')}
-                        className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700"
-                       >
-                       Manage Reviews
-                          </button>
-            <button 
-              onClick={() => setIsAuthenticated(false)}
-              className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700"
-            >
-              Logout
-            </button>
-            <button 
-              onClick={() => router.push('/')}
-              className="w-full bg-gray-600 text-white py-2 rounded hover:bg-gray-700"
-            >
-              View Site
-            </button>
-          </div>
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-4xl font-bold">Admin Dashboard</h2>
+        <div className="flex gap-3">
+          <button 
+            onClick={() => router.push('/admin/orders')}
+            className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700"
+          >
+            Manage Orders
+          </button>
+          <button 
+            onClick={() => router.push('/admin/reviews')}
+            className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+          >
+            Manage Reviews
+          </button>
+          <button 
+            onClick={() => router.push('/admin/products')}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Manage Products
+          </button>
+          <button 
+            onClick={() => setIsAuthenticated(false)}
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+          >
+            Logout
+          </button>
         </div>
       </div>
 
-      <div className="mb-8">
-        <AdminProductForm onAddProduct={handleAddProduct} />
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h3 className="text-2xl font-semibold mb-4">Manage Products</h3>
-        <div className="space-y-2">
-          {products.map(product => (
-            <div key={product.id} className="flex justify-between items-center border-b py-3">
-              <div>
-                <p className="font-semibold">{product.name}</p>
-                <p className="text-sm text-gray-600">₦{product.price.toLocaleString()} • {product.views || 0} views</p>
-              </div>
-              <button
-                onClick={() => handleDeleteProduct(product.id)}
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-<div className="bg-white p-6 rounded-lg shadow-md">
-  <h3 className="text-2xl font-semibold mb-4">Add Gallery Image</h3>
-  
-  <ImageUpload 
-    onUploadSuccess={(url) => setNewGalleryItem({...newGalleryItem, image: url})}
-    buttonText="Upload gallery image"
-  />
-  
-  <input
-    type="text"
-    placeholder="Image Title"
-    value={newGalleryItem.title}
-    onChange={(e) => setNewGalleryItem({...newGalleryItem, title: e.target.value})}
-    className="border rounded px-3 py-2 w-full mt-4"
-  />
-  
-  <button
-    onClick={handleAddGalleryImage}
-    className="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
-    disabled={!newGalleryItem.image || !newGalleryItem.title}
-  >
-    Add to Gallery
-  </button>
-
-  <div className="mt-6 grid md:grid-cols-3 gap-4">
-    {gallery.map(item => (
-      <div key={item.id} className="relative group">
-        <img src={item.image} alt={item.title} className="w-full h-32 object-cover rounded" />
-        <p className="text-sm mt-1">{item.title}</p>
-      </div>
-    ))}
-  </div>
-</div>
+      <AdminDashboard orders={orders} products={products} />
     </div>
   );
 }
