@@ -1,3 +1,21 @@
+// Currency configuration
+export const CURRENCY = {
+  symbol: '$', // Change to '£' for pounds, '$' for dollars, '₦' for naira
+  code: 'USD', // 'GBP' for pounds, 'USD' for dollars, 'NGN' for naira
+  position: 'before' // 'before' or 'after'
+};
+
+export const formatPrice = (price) => {
+  const amount = parseFloat(price).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+  
+  return CURRENCY.position === 'before' 
+    ? `${CURRENCY.symbol}${amount}` 
+    : `${amount}${CURRENCY.symbol}`;
+};
+
 export const generateWhatsAppMessage = (cart, customerInfo) => {
   let message = `Hello! I'd like to place an order:
 
@@ -29,4 +47,10 @@ ${customerInfo.email ? `Email: ${customerInfo.email}\n` : ''}${customerInfo.addr
   message += "Please confirm availability and payment details. Thank you!";
 
   return encodeURIComponent(message);
+};
+
+export const getMinDeliveryDate = (minLeadTime) => {
+  const date = new Date();
+  date.setDate(date.getDate() + minLeadTime);
+  return date.toISOString().split('T')[0];
 };

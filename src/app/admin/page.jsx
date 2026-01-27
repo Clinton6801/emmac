@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getProducts, getOrders } from '../lib/data';
-import AdminDashboard from '../components/AdminDashboard';
+import { getProducts, getOrders } from '../../lib/data';
+import AdminDashboard from '../../components/AdminDashboard';
 
 export default function AdminPage() {
   const router = useRouter();
