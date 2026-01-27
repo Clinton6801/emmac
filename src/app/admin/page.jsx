@@ -94,6 +94,12 @@ export default function AdminPage() {
             Manage Reviews
           </button>
           <button 
+             onClick={() => router.push('/admin/customers')}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+             >
+                View Customers
+                </button>
+          <button 
             onClick={() => router.push('/admin/products')}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
