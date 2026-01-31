@@ -89,6 +89,7 @@ export default function AdminProductsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <AdminAuthGuard>
       <button 
         onClick={() => router.push('/admin')}
         className="flex items-center text-orange-600 hover:underline mb-6"
@@ -230,6 +231,7 @@ export default function AdminProductsPage() {
           </div>
         </div>
       )}
+      </AdminAuthGuard>
     </div>
   );
 }
