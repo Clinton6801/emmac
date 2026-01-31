@@ -13,22 +13,35 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const result = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
+    console.log('--- Frontend Login Start ---');
+    console.log('Sending credentials for:', email);
 
-    if (result?.error) {
-      toast.error('Invalid email or password');
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      console.log('NextAuth Response Object:', result);
+
+      if (result?.error) {
+        console.error('Login Error Code:', result.error);
+        toast.error('Invalid email or password');
+        setLoading(false);
+      } else {
+        console.log('Login successful! Redirecting to /admin...');
+        toast.success('Login successful!');
+        router.push('/admin');
+      }
+    } catch (err) {
+      console.error('Unexpected frontend error:', err);
+      toast.error('An unexpected error occurred');
       setLoading(false);
-    } else {
-      toast.success('Login successful!');
-      router.push('/admin');
     }
   };
 

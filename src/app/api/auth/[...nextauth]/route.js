@@ -12,33 +12,32 @@ export const authOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error('Please enter email and password');
-        }
+  const { data: user, error } = await supabase
+    .from('admin_users')
+    .select('*')
+    .eq('email', credentials.email)
+    .single();
 
-        const { data: user, error } = await supabase
-          .from('admin_users')
-          .select('*')
-          .eq('email', credentials.email)
-          .single();
+  if (user) {
+    // LOG THESE TO YOUR VS CODE TERMINAL (NOT BROWSER)
+    console.log('--- SERVER SIDE DEBUG ---');
+    console.log('Input Password:', credentials.password);
+    console.log('DB Hashed Password:', user.password);
+    
+   // Add .trim() to both to be 100% safe
+const match = await bcrypt.compare(
+  credentials.password.trim(), 
+  user.password.trim()
+);
+console.log('--- SERVER SIDE DEBUG ---');
+console.log('Input Password (Trimmed):', credentials.password.trim());
+console.log('Bcrypt Match Result:', match);
 
-        if (error || !user) {
-          throw new Error('No user found with this email');
-        }
-
-        const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
-
-        if (!isPasswordValid) {
-          throw new Error('Invalid password');
-        }
-
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role
-        };
-      }
+    
+  }
+  
+  // ... rest of your logic
+}
     })
   ],
   session: {
