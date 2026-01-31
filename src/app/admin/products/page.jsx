@@ -8,6 +8,7 @@ import { formatPrice } from '../../../lib/utils';
 import toast from 'react-hot-toast';
 import AdminProductForm from '../../../components/AdminProductform';
 import BulkProductUpload from '../../../components/BulkProductUpload';
+import AdminAuthGuard from '../../../components/AdminAuthGuard';
 
 export default function AdminProductsPage() {
   const router = useRouter();

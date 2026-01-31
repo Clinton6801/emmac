@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Lock, Mail } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { signOut } from 'next-auth/react';
 import { getProducts, getOrders } from '../../lib/data';
 import AdminDashboard from '../../components/AdminDashboard';
+import AdminAuthGuard from '../../components/AdminAuthGuard';
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
@@ -43,6 +44,7 @@ export default function AdminPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+       <AdminAuthGuard>
       <div className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-4xl font-bold">Admin Dashboard</h2>
@@ -83,6 +85,7 @@ export default function AdminPage() {
       </div>
 
       <AdminDashboard orders={orders} products={products} />
+      </AdminAuthGuard>
     </div>
   );
 }

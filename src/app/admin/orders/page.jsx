@@ -6,6 +6,7 @@ import { ArrowLeft, Package } from 'lucide-react';
 import { getOrders, updateOrderStatus } from '../../../lib/data';
 import { formatPrice } from '../../../lib/utils';
 import toast from 'react-hot-toast';
+import AdminAuthGuard from '../../../components/AdminAuthGuard';
 
 const statusOptions = ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled'];
 const statusColors = {

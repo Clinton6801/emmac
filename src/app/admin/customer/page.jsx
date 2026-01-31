@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Search, Mail, Phone as PhoneIcon } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-import { formatPrice } from '../lib/utils';
+import { supabase } from '../../../lib/supabase';
+import { formatPrice } from '../../../lib/utils';
+import AdminAuthGuard from '../../../components/AdminAuthGuard';
 
 export default function AdminCustomersPage() {
   const router = useRouter();

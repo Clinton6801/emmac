@@ -6,6 +6,7 @@ import { ArrowLeft, Star, Check, X } from 'lucide-react';
 import { getPendingReviews, approveReview } from '../../../lib/data';
 import { supabase } from '../../../lib/supabase';
 import toast from 'react-hot-toast';
+import AdminAuthGuard from '../../../components/AdminAuthGuard';
 
 export default function AdminReviewsPage() {
   const router = useRouter();
