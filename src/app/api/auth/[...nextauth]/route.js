@@ -3,7 +3,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { supabase } from '../../../../lib/supabase';
 import bcrypt from 'bcryptjs';
 
-
 export const authOptions = {
   providers: [
     CredentialsProvider({
@@ -14,7 +13,7 @@ export const authOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          return null;
+          throw new Error('Please enter email and password');
         }
 
         const { data: user, error } = await supabase
@@ -24,13 +23,13 @@ export const authOptions = {
           .single();
 
         if (error || !user) {
-          return null;
+          throw new Error('No user found with this email');
         }
 
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
 
         if (!isPasswordValid) {
-          return null;
+          throw new Error('Invalid password');
         }
 
         return {
@@ -44,7 +43,7 @@ export const authOptions = {
   ],
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 30 * 24 * 60 * 60,
   },
   pages: {
     signIn: '/admin/login',
