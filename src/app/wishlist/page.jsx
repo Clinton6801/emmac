@@ -3,7 +3,7 @@
 import { useWishlist } from '../../context/WishlistContext';
 import { useCart } from '../../context/CartContext';
 import { Trash2, ShoppingCart, Heart } from 'lucide-react';
-import { formatPrice } from '@/lib/utils';
+import { formatPrice } from '../../lib/utils';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 

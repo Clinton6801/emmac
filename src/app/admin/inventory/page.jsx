@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, AlertTriangle, Package } from 'lucide-react';
-import { getProducts, getLowStockProducts, updateProductStock, supabase } from '../lib/data';
-import { formatPrice } from '../lib/utils';
+import { getProducts, getLowStockProducts, updateProductStock, supabase } from '../../../lib/data';
+import { formatPrice } from '../../../lib/utils';
 import toast from 'react-hot-toast';
-import AdminAuthGuard from '@/components/AdminAuthGuard';
+import AdminAuthGuard from '../../../components/AdminAuthGuard';
 
 export default function AdminInventoryPage() {
   const router = useRouter();
