@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ShoppingCart, Menu, X, Heart, Home, Package, Image as ImageIcon, Phone, HelpCircle, MapPin, Search } from 'lucide-react';
-import { useCart } from '@/context/CartContext';
-import { useWishlist } from '@/context/WishlistContext';
-import { businessInfo } from '@/lib/data';
+import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+import { businessInfo } from '../lib/data';
 import { usePathname } from 'next/navigation';
 
 export default function Navigation() {
