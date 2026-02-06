@@ -1,12 +1,14 @@
 'use client';
 
 import { X, Plus, Minus, Trash2, Phone } from 'lucide-react';
-import { useCart } from '../context/CartContext';
+import { useCart } from '@/context/CartContext';
 import { formatPrice, generateWhatsAppMessage } from '../lib/utils';
 import { businessInfo } from '../lib/data';
-import { createOrder } from '../lib/data';
+import { createOrder, decrementStock } from '../lib/data';
+import { supabase } from '../lib/supabase';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
+import { useSwipeable } from 'react-swipeable';
 
 export default function CartSidebar() {
   const { cart, showCart, setShowCart, updateQuantity, removeFromCart, getCartTotal, clearCart } = useCart();
@@ -17,6 +19,13 @@ export default function CartSidebar() {
     address: ''
   });
   const [showCustomerForm, setShowCustomerForm] = useState(false);
+
+  // Swipe handlers for mobile
+  const swipeHandlers = useSwipeable({
+    onSwipedRight: () => setShowCart(false),
+    trackMouse: false,
+    trackTouch: true,
+  });
 
   const handleRemoveFromCart = (productId, productName) => {
     removeFromCart(productId);
@@ -37,6 +46,22 @@ export default function CartSidebar() {
       return;
     }
 
+    // Check stock availability
+    for (const item of cart) {
+      if (item.track_inventory) {
+        const { data: product } = await supabase
+          .from('products')
+          .select('stock_quantity')
+          .eq('id', item.id)
+          .single();
+
+        if (product && product.stock_quantity < item.quantity) {
+          toast.error(`Sorry, only ${product.stock_quantity} of ${item.name} available`);
+          return;
+        }
+      }
+    }
+
     // Save order to database
     const orderData = {
       customer_name: customerInfo.name,
@@ -51,6 +76,13 @@ export default function CartSidebar() {
     const savedOrder = await createOrder(orderData);
     
     if (savedOrder) {
+      // Decrease stock for each item
+      for (const item of cart) {
+        if (item.track_inventory) {
+          await decrementStock(item.id, item.quantity);
+        }
+      }
+
       toast.success('Order saved! Redirecting to WhatsApp...');
       
       // Generate WhatsApp message
@@ -73,11 +105,17 @@ export default function CartSidebar() {
 
   return (
     <>
-      <div className={`fixed top-0 right-0 h-full w-96 bg-white shadow-2xl transform transition-transform duration-300 z-50 ${showCart ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div 
+        {...swipeHandlers}
+        className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl transform transition-transform duration-300 z-50 ${showCart ? 'translate-x-0' : 'translate-x-full'}`}
+      >
+        {/* Swipe indicator - only visible on mobile */}
+        <div className="md:hidden absolute top-4 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-gray-300 rounded-full"></div>
+
         <div className="p-6 h-full flex flex-col">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-2xl font-bold">Your Cart</h3>
-            <button onClick={() => setShowCart(false)}>
+            <button onClick={() => setShowCart(false)} className="touch-manipulation">
               <X className="w-6 h-6" />
             </button>
           </div>
@@ -88,7 +126,7 @@ export default function CartSidebar() {
                 <p className="text-gray-500">Your cart is empty</p>
                 <button 
                   onClick={() => setShowCart(false)}
-                  className="mt-4 text-orange-600 hover:underline"
+                  className="mt-4 text-orange-600 hover:underline touch-manipulation"
                 >
                   Continue Shopping
                 </button>
@@ -113,7 +151,7 @@ export default function CartSidebar() {
                       </div>
                       <button
                         onClick={() => handleRemoveFromCart(item.id, item.name)}
-                        className="text-red-600 hover:text-red-700 transition"
+                        className="text-red-600 hover:text-red-700 transition touch-manipulation"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -122,14 +160,14 @@ export default function CartSidebar() {
                       <div className="flex items-center border rounded">
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="px-2 py-1 hover:bg-gray-100 transition"
+                          className="px-3 py-2 hover:bg-gray-100 transition touch-manipulation"
                         >
                           <Minus className="w-3 h-3" />
                         </button>
-                        <span className="px-3 py-1 text-sm">{item.quantity}</span>
+                        <span className="px-4 py-2 text-sm">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="px-2 py-1 hover:bg-gray-100 transition"
+                          className="px-3 py-2 hover:bg-gray-100 transition touch-manipulation"
                         >
                           <Plus className="w-3 h-3" />
                         </button>
@@ -147,7 +185,7 @@ export default function CartSidebar() {
                   placeholder="Full Name *"
                   value={customerInfo.name}
                   onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
-                  className="w-full border rounded px-3 py-2"
+                  className="w-full border rounded px-3 py-2 touch-manipulation"
                   required
                 />
                 <input
@@ -155,7 +193,7 @@ export default function CartSidebar() {
                   placeholder="Phone Number *"
                   value={customerInfo.phone}
                   onChange={(e) => setCustomerInfo({...customerInfo, phone: e.target.value})}
-                  className="w-full border rounded px-3 py-2"
+                  className="w-full border rounded px-3 py-2 touch-manipulation"
                   required
                 />
                 <input
@@ -163,17 +201,17 @@ export default function CartSidebar() {
                   placeholder="Email (optional)"
                   value={customerInfo.email}
                   onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
-                  className="w-full border rounded px-3 py-2"
+                  className="w-full border rounded px-3 py-2 touch-manipulation"
                 />
                 <textarea
                   placeholder="Delivery Address (optional)"
                   value={customerInfo.address}
                   onChange={(e) => setCustomerInfo({...customerInfo, address: e.target.value})}
-                  className="w-full border rounded px-3 py-2 h-20"
+                  className="w-full border rounded px-3 py-2 h-20 touch-manipulation"
                 />
                 <button
                   onClick={() => setShowCustomerForm(false)}
-                  className="text-orange-600 text-sm hover:underline"
+                  className="text-orange-600 text-sm hover:underline touch-manipulation"
                 >
                   ← Back to cart
                 </button>
@@ -192,21 +230,21 @@ export default function CartSidebar() {
               {!showCustomerForm ? (
                 <button
                   onClick={handleProceedToOrder}
-                  className="w-full bg-orange-600 text-white py-3 rounded-lg hover:bg-orange-700 transition font-semibold"
+                  className="w-full bg-orange-600 text-white py-3 rounded-lg hover:bg-orange-700 transition font-semibold touch-manipulation"
                 >
                   Proceed to Order
                 </button>
               ) : (
                 <button
                   onClick={sendToWhatsApp}
-                  className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 flex items-center justify-center space-x-2 transition font-semibold"
+                  className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 flex items-center justify-center space-x-2 transition font-semibold touch-manipulation"
                 >
                   <Phone className="w-5 h-5" />
                   <span>Send Order via WhatsApp</span>
                 </button>
               )}
               <p className="text-xs text-gray-500 text-center mt-2">
-                {showCustomerForm ? 'Your order will be saved and sent to WhatsApp' : 'Secure checkout via WhatsApp'}
+                {showCustomerForm ? 'Your order will be saved and sent to WhatsApp' : 'Swipe right to close'}
               </p>
             </div>
           )}
