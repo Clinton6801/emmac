@@ -1,9 +1,13 @@
-// Currency configuration
+// Currency configuration - CHANGE THIS TO YOUR PREFERRED CURRENCY
 export const CURRENCY = {
-  symbol: '$', // Change to '£' for pounds, '$' for dollars, '₦' for naira
-  code: 'USD', // 'GBP' for pounds, 'USD' for dollars, 'NGN' for naira
-  position: 'before' // 'before' or 'after'
+  symbol: '$',      // Change to '£' for British Pounds
+  code: 'USD',      // Change to 'GBP' for British Pounds
+  position: 'before' // 'before' means $100, 'after' means 100$
 };
+
+// For British Pounds, use:
+// symbol: '£',
+// code: 'GBP',
 
 export const formatPrice = (price) => {
   const amount = parseFloat(price).toLocaleString('en-US', {

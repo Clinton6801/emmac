@@ -3,6 +3,9 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { supabase } from '../../../../lib/supabase';
 import bcrypt from 'bcryptjs';
 
+// 1. Force Node.js runtime to avoid Edge Runtime issues with bcrypt
+export const runtime = 'nodejs';
+
 export const authOptions = {
   providers: [
     CredentialsProvider({
@@ -12,37 +15,61 @@ export const authOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-  const { data: user, error } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('email', credentials.email)
-    .single();
+        // Basic check
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error('Please enter email and password');
+        }
 
-  if (user) {
-    // LOG THESE TO YOUR VS CODE TERMINAL (NOT BROWSER)
-    console.log('--- SERVER SIDE DEBUG ---');
-    console.log('Input Password:', credentials.password);
-    console.log('DB Hashed Password:', user.password);
-    
-   // Add .trim() to both to be 100% safe
-const match = await bcrypt.compare(
-  credentials.password.trim(), 
-  user.password.trim()
-);
-console.log('--- SERVER SIDE DEBUG ---');
-console.log('Input Password (Trimmed):', credentials.password.trim());
-console.log('Bcrypt Match Result:', match);
+        const cleanEmail = credentials.email.trim().toLowerCase();
+        const cleanPassword = credentials.password.trim();
 
-    
-  }
-  
-  // ... rest of your logic
-}
+        // Fetch user from Supabase
+        const { data: user, error } = await supabase
+          .from('admin_users')
+          .select('*')
+          .eq('email', cleanEmail)
+          .single();
+
+        // Log result to VS Code Terminal
+        console.log('--- SERVER SIDE DEBUG ---');
+        if (error || !user) {
+          console.log('User not found in Database for:', cleanEmail);
+          throw new Error('No user found with this email');
+        }
+
+        // 2. Perform Bcrypt Comparison
+        const isPasswordValid = await bcrypt.compare(cleanPassword, user.password.trim());
+        
+        console.log('Input Password:', cleanPassword);
+        console.log('DB Hashed Password:', user.password.trim());
+        console.log('Bcrypt Match Result:', isPasswordValid);
+
+        if (!isPasswordValid) {
+          // If this is false, generate a fresh hash to copy into Supabase
+          const freshHash = await bcrypt.hash(cleanPassword, 10);
+          console.log('--- GENERATE NEW HASH ---');
+          console.log('If you want this password to work, paste this into Supabase:');
+          console.log(freshHash);
+          console.log('-------------------------');
+          throw new Error('Invalid password');
+        }
+
+        // Success - Return user object
+        console.log('Login Successful for:', user.email);
+        return {
+          id: String(user.id),
+          name: user.name,
+          email: user.email,
+          role: user.role
+        };
+      }
     })
   ],
+  // 3. Add Debug mode to see detailed 401 errors in terminal
+  debug: true, 
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   pages: {
     signIn: '/admin/login',
@@ -61,6 +88,7 @@ console.log('Bcrypt Match Result:', match);
       return session;
     }
   },
+  // Ensure this matches your .env file
   secret: process.env.NEXTAUTH_SECRET,
 };
 
