@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, AlertTriangle, Package } from 'lucide-react';
 import { getProducts, getLowStockProducts, updateProductStock } from '../../../lib/data';
-import { supabase } from '../../../lib/supabase'; // Point this to where your supabase client is
+import { supabase } from '../../../lib/supabase'; 
 import { formatPrice } from '../../../lib/utils';
 import toast from 'react-hot-toast';
 import AdminAuthGuard from '../../../components/AdminAuthGuard';
