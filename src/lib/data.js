@@ -5,7 +5,7 @@ import { Cake, UtensilsCrossed, Fish, Users } from 'lucide-react';
 export const businessInfo = {
   name: "Delish Catering",
   hours: "Mon-Sat: 8AM - 8PM, Sun: Closed",
-  location: "united Kingdom",
+  location: "United Kingdom",
   phone: "+234 XXX XXX XXXX",
   whatsapp: "2349037789995" // Replace with actual number
 };
