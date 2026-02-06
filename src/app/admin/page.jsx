@@ -76,6 +76,12 @@ export default function AdminPage() {
             Reviews
           </button>
           <button 
+  onClick={() => router.push('/admin/inventory')}
+  className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 touch-manipulation"
+>
+  Inventory
+</button>
+          <button 
             onClick={() => signOut({ callbackUrl: '/' })}
             className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
           >
