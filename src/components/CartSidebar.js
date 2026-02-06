@@ -1,7 +1,7 @@
 'use client';
 
 import { X, Plus, Minus, Trash2, Phone } from 'lucide-react';
-import { useCart } from '@/context/CartContext';
+import { useCart } from '../context/CartContext';
 import { formatPrice, generateWhatsAppMessage } from '../lib/utils';
 import { businessInfo } from '../lib/data';
 import { createOrder, decrementStock } from '../lib/data';
