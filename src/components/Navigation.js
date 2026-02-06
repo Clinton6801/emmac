@@ -28,6 +28,15 @@ export default function Navigation() {
   <Link href="/contact" className="hover:text-orange-600 transition">Contact</Link>
   <Link href="/faq" className="hover:text-orange-600 transition">FAQ</Link>
   <Link href="/about" className="hover:text-orange-600 transition">About</Link>
+  {/* Wishlist - Desktop */}
+<Link href="/wishlist" className="hidden md:block relative p-2 hover:bg-gray-100 rounded-full transition touch-manipulation">
+  <Heart className="w-6 h-6" />
+  {wishlist.length > 0 && (
+    <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
+      {wishlist.length}
+    </span>
+  )}
+</Link>
 </div>
           
           {/* Cart & Mobile Menu */}
