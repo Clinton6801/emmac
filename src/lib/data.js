@@ -281,3 +281,55 @@ export async function deleteProductImage(imageId) {
   return true;
 }
 
+// Inventory Management Functions
+export async function updateProductStock(productId, quantity) {
+  const { data, error } = await supabase
+    .from('products')
+    .update({ stock_quantity: quantity })
+    .eq('id', productId)
+    .select()
+    .single();
+  
+  if (error) {
+    console.error('Error updating stock:', error);
+    return null;
+  }
+  return data;
+}
+
+export async function decrementStock(productId, quantity) {
+  // Get current stock
+  const { data: product } = await supabase
+    .from('products')
+    .select('stock_quantity')
+    .eq('id', productId)
+    .single();
+
+  if (product && product.stock_quantity >= quantity) {
+    const { data, error } = await supabase
+      .from('products')
+      .update({ stock_quantity: product.stock_quantity - quantity })
+      .eq('id', productId)
+      .select()
+      .single();
+    
+    return !error;
+  }
+  return false;
+}
+
+export async function getLowStockProducts() {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .eq('track_inventory', true)
+    .filter('stock_quantity', 'lte', 'low_stock_threshold')
+    .order('stock_quantity', { ascending: true });
+  
+  if (error) {
+    console.error('Error fetching low stock products:', error);
+    return [];
+  }
+  return data;
+}
+
