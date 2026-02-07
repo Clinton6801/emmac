@@ -99,62 +99,55 @@ export default function Navigation() {
         </div>
       </div>
       
-      {/* Enhanced Mobile Menu */}
-      {mobileMenu && (
-        <>
-          {/* Backdrop */}
-          <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
-            onClick={() => setMobileMenu(false)}
-          />
-          
-          {/* Menu Drawer */}
-          <div className="fixed top-16 left-0 right-0 bottom-0 bg-white z-50 md:hidden overflow-y-auto">
-            <div className="p-4 space-y-2">
-              {menuItems.map((item) => {
-                const IconComponent = item.icon;
-                const isActive = pathname === item.href;
-                
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`flex items-center gap-4 p-4 rounded-lg transition touch-manipulation ${
-                      isActive 
-                        ? 'bg-orange-50 text-orange-600 font-semibold' 
-                        : 'hover:bg-gray-50'
-                    }`}
-                  >
-                    <IconComponent className="w-6 h-6" />
-                    <span className="flex-1">{item.label}</span>
-                    {item.badge !== undefined && item.badge > 0 && (
-                      <span className="bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center">
-                        {item.badge}
-                      </span>
-                    )}
-                  </Link>
-                );
-              })}
-            </div>
+      {/* Enhanced Mobile Menu - Centered with Blur */}
+{mobileMenu && (
+  <>
+    {/* Backdrop with Blur */}
+    <div 
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden animate-fadeIn"
+      onClick={() => setMobileMenu(false)}
+    />
+    
+    {/* Menu Drawer - Centered */}
+    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-md bg-white z-50 md:hidden rounded-2xl shadow-2xl max-h-[80vh] overflow-hidden animate-fadeIn">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-6 flex justify-between items-center">
+        <h3 className="text-2xl font-bold">Menu</h3>
+        <button onClick={() => setMobileMenu(false)} className="text-white">
+          <X className="w-6 h-6" />
+        </button>
+      </div>
 
-            {/* Mobile Menu Footer */}
-            <div className="border-t p-4 mt-4">
-              <div className="bg-orange-50 p-4 rounded-lg">
-                  <p className="font-semibold mb-2">Need Help?</p>
-                  <a
-                    href={`https://wa.me/${businessInfo.whatsapp}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-green-600 hover:underline"
-                  >
-                    <Phone className="w-5 h-5" />
-                    Chat on WhatsApp
-                  </a>
-                </div>
-            </div>
-          </div>
-        </>
-      )}
+      {/* Menu Items */}
+      <div className="p-4 space-y-2 overflow-y-auto max-h-[calc(80vh-100px)]">
+        {menuItems.map((item) => {
+          const IconComponent = item.icon;
+          const isActive = pathname === item.href;
+          
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-4 p-4 rounded-lg transition touch-manipulation ${
+                isActive 
+                  ? 'bg-orange-50 text-orange-600 font-semibold' 
+                  : 'hover:bg-gray-50'
+              }`}
+            >
+              <IconComponent className="w-6 h-6" />
+              <span className="flex-1">{item.label}</span>
+              {item.badge !== undefined && item.badge > 0 && (
+                <span className="bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center">
+                  {item.badge}
+                </span>
+              )}
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  </>
+)}
     </nav>
   );
 }

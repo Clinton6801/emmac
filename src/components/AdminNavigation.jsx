@@ -44,6 +44,10 @@ export default function AdminNavigation() {
               <Star className="w-4 h-4" />
               Reviews
             </Link>
+            <Link href="/admin/gallery" className="flex items-center gap-2 hover:text-orange-500 transition">
+  <ImageIcon className="w-4 h-4" />
+  Gallery
+</Link>
           </div>
           
           {/* User & Logout */}
