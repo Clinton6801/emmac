@@ -105,21 +105,33 @@ export default function CartSidebar() {
 
   return (
     <>
+      {/* Backdrop with Blur */}
+      {showCart && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity animate-fadeIn"
+          onClick={() => setShowCart(false)}
+        />
+      )}
+
+      {/* Cart Modal - Centered on Mobile, Sidebar on Desktop */}
       <div 
         {...swipeHandlers}
-        className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl transform transition-transform duration-300 z-50 ${showCart ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed bg-white shadow-2xl transform transition-all duration-300 z-50 
+          md:top-0 md:right-0 md:h-full md:w-96 md:rounded-none
+          max-md:top-1/2 max-md:left-1/2 max-md:-translate-x-1/2 max-md:-translate-y-1/2 
+          max-md:w-11/12 max-md:max-w-md max-md:rounded-2xl max-md:max-h-[85vh]
+          ${showCart ? 'md:translate-x-0 max-md:scale-100' : 'md:translate-x-full max-md:scale-0'}`}
       >
-        {/* Swipe indicator - only visible on mobile */}
-        <div className="md:hidden absolute top-4 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-gray-300 rounded-full"></div>
+        {/* Header */}
+        <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-6 flex justify-between items-center md:rounded-none rounded-t-2xl">
+          <h3 className="text-2xl font-bold">Your Cart</h3>
+          <button onClick={() => setShowCart(false)} className="text-white touch-manipulation">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
 
-        <div className="p-6 h-full flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-2xl font-bold">Your Cart</h3>
-            <button onClick={() => setShowCart(false)} className="touch-manipulation">
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-
+        {/* Cart Content */}
+        <div className="p-6 h-[calc(85vh-100px)] md:h-[calc(100vh-100px)] flex flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto">
             {cart.length === 0 ? (
               <div className="text-center mt-12">
@@ -250,13 +262,6 @@ export default function CartSidebar() {
           )}
         </div>
       </div>
-
-      {showCart && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity"
-          onClick={() => setShowCart(false)}
-        />
-      )}
     </>
   );
 }

@@ -2,8 +2,9 @@
 
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
-import { LayoutDashboard, Package, ShoppingBag, Users, Star, Archive, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package,ImageIcon, ShoppingBag, Users, Star, Archive, LogOut } from 'lucide-react';
 import Link from 'next/link';
+
 
 export default function AdminNavigation() {
   const router = useRouter();
