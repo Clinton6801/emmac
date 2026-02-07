@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Trash2 } from 'lucide-react';
-import { getGallery, addGalleryImage, supabase } from '../../../lib/data';
-import ImageUpload from '../../../components/ImageUpload';
+import { getGallery, addGalleryImage, } from '../../../lib/data';
+import ImageUpload from '../../../components/imageUpload';
 import toast from 'react-hot-toast';
 import AdminAuthGuard from '../../../components/AdminAuthGuard';
-
+import { supabase } from '../../../lib/supabase'
 export default function AdminGalleryPage() {
   const router = useRouter();
   const [gallery, setGallery] = useState([]);
