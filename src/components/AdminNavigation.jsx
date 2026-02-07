@@ -2,9 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
-import { LayoutDashboard, Package,ImageIcon, ShoppingBag, Users, Star, Archive, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, ImageIcon, ShoppingBag, Users, Star, Archive, LogOut } from 'lucide-react';
 import Link from 'next/link';
-
 
 export default function AdminNavigation() {
   const router = useRouter();
@@ -46,16 +45,13 @@ export default function AdminNavigation() {
               Reviews
             </Link>
             <Link href="/admin/gallery" className="flex items-center gap-2 hover:text-orange-500 transition">
-  <ImageIcon className="w-4 h-4" />
-  Gallery
-</Link>
+              <ImageIcon className="w-4 h-4" />
+              Gallery
+            </Link>
           </div>
           
-          {/* User & Logout */}
+          {/* Logout */}
           <div className="flex items-center gap-4">
-            <span className="text-sm hidden md:block">
-              {session?.user?.name || 'Admin'}
-            </span>
             <button
               onClick={() => signOut({ callbackUrl: '/' })}
               className="flex items-center gap-2 bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition"
