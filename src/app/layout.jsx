@@ -19,9 +19,9 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <Providers>
           <ToastProvider />
-          <div className="min-h-screen bg-gray-50">
+          <div className="flex flex-col min-h-screen bg-gray-50">
             <Navigation />
-            <main>{children}</main>
+            <main className="flex-1">{children}</main>
             <CartSidebar />
             <Footer />
           </div>
